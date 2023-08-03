@@ -1,0 +1,117 @@
+Traffic Simuation
+
+GUI Guessing Game
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+public class TrafficSimulation {
+
+    private static final String[] COLORS = {"Red", "Green", "Blue", "Orange", "Pink"};
+    private static final String[] DIRECTIONS = {"North", "South", "East", "West"};
+
+    private static List<String> cars = new ArrayList<>();
+
+    public static void main(String[] args) {
+        generateCars(100);
+        Map<String, Map<String, Integer>> report = countCarsByColorAndDirection();
+        displayReport(report);
+    }
+
+    private static void generateCars(int numCars) {
+        Random random = new Random();
+        for (int i = 0; i < numCars; i++) {
+            String direction = getRandomDirection(random);
+            String color = getRandomColor(random);
+            cars.add(direction + "-" + color);
+        }
+    }
+
+    private static String getRandomDirection(Random random) {
+        return DIRECTIONS[random.nextInt(DIRECTIONS.length)];
+    }
+
+    private static String getRandomColor(Random random) {
+        return COLORS[random.nextInt(COLORS.length)];
+    }
+
+    private static Map<String, Map<String, Integer>> countCarsByColorAndDirection() {
+        Map<String, Map<String, Integer>> colorDirectionCount = new HashMap<>();
+
+        for (String direction : DIRECTIONS) {
+            colorDirectionCount.put(direction, new HashMap<>());
+            for (String color : COLORS) {
+                colorDirectionCount.get(direction).put(color, 0);
+            }
+        }
+
+        for (String car : cars) {
+            String[] parts = car.split("-");
+            String direction = parts[0];
+            String color = parts[1];
+            int count = colorDirectionCount.get(direction).get(color);
+            colorDirectionCount.get(direction).put(color, count + 1);
+        }
+
+        return colorDirectionCount;
+    }
+
+    private static void displayReport(Map<String, Map<String, Integer>> report) {
+        System.out.println("City Traffic Engineering Department - Traffic Simulation Report");
+        System.out.println("------------------------------------------------------------");
+        for (String direction : DIRECTIONS) {
+            System.out.println("Direction: " + direction);
+            for (String color : COLORS) {
+                int count = report.get(direction).get(color);
+                System.out.println(color + ": " + count + " cars");
+            }
+            System.out.println();
+        }
+    }
+}
+
+Part 2: Happy Birds
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class HappyBirdsGame {
+
+    public static void main(String[] args) {
+        Map<String, Integer> birdHappiness = new HashMap<>();
+        birdHappiness.put("Sparrow", 0);
+        birdHappiness.put("Robin", 0);
+        birdHappiness.put("Blue Jay", 0);
+        birdHappiness.put("Cardinal", 0);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Happy Birds Game!");
+
+        while (true) {
+            System.out.println("Enter the bird's name (or 'exit' to quit):");
+            String birdName = scanner.nextLine();
+
+            if (birdName.equalsIgnoreCase("exit")) {
+                break;
+            }
+
+            if (birdHappiness.containsKey(birdName)) {
+                int happinessLevel = birdHappiness.get(birdName);
+                birdHappiness.put(birdName, happinessLevel + 1);
+                System.out.println(birdName + " is happy now! Happiness level: " + (happinessLevel + 1));
+            } else {
+                System.out.println("Sorry, that bird is not in the game. Try again!");
+            }
+        }
+
+        System.out.println("Final Happiness Levels:");
+        for (String bird : birdHappiness.keySet()) {
+            int happinessLevel = birdHappiness.get(bird);
+            System.out.println(bird + ": " + happinessLevel);
+        }
+    }
+}
+
